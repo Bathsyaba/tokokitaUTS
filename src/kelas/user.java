@@ -86,11 +86,108 @@ public class user {
              JOptionPane.showMessageDialog(null, "user gagal ditambahkan");
         }
     }
-
-    public static class tambahUser {
-
-   
+    public ResultSet tampiluser(){
+         query = "SELECT * FROM user";
+         try {
+            st = konek.createStatement();
+            rs = st.executeQuery(query);
+        } catch (SQLException sQLException) {
+            JOptionPane.showMessageDialog(null, "Data gagal ditampilkan");
+        }
+        return rs;
     }
-
+    public void hapusUser(){
+        query = "DELETE FROM user WHERE user_name = ?";
+        try {
+            ps = konek.prepareStatement(query);
+            
+            ps.setString(1, user_name);
+            
+            ps.executeUpdate();
+            ps.close();
+            
+            JOptionPane.showMessageDialog(null, "user berhasil dihapus");
+        } catch (SQLException sQLException) {
+             JOptionPane.showMessageDialog(null, "user gagal dihapus");
+        }
+    }
+    public void ubahUser(){
+        if (user_password.equals("")){
+            query = "UPDATE user SET user_email = ?,"
+                    + " user_fullname = ?,"
+                    + " user_status = ?"
+                    + " WHERE user_name = ?";
+            
+            try {
+                ps = konek.prepareStatement(query);
+                
+                ps.setString(1, user_email);
+                ps.setString(2, user_fullname);
+                ps.setInt(3, user_status);
+                ps.setString(4, user_name);
+                
+                ps.executeUpdate();
+                ps.close();
+                JOptionPane.showInternalMessageDialog(null, "User Berhasil Di Ubah");
+            } catch (SQLException sQLException) {
+                JOptionPane.showMessageDialog(null, "User Gagal Di Ubah");
+            }
+            
+        }else {
+            query = "UPDATE user SET user_email = ?,"
+                    + "user_fullname = ?,"
+                    + "user_status = ?,"
+                    + "user_password = MD5 (?)"
+                    + "WHERE user_name = ?";
+            
+            try {
+                ps = konek.prepareStatement(query);
+                ps.setString(1, user_email);
+                ps.setString(2, user_fullname);
+                ps.setInt(3, user_status);
+                ps.setString(4, user_password);
+                ps.setString(5, user_name);
+                
+                ps.executeUpdate();
+                ps.close();
+                JOptionPane.showMessageDialog(null, "User Berhasil Di Ubah");
+            
+            } catch (SQLException sQLException) {
+                JOptionPane.showMessageDialog(null, "User Gagal Di Ubah");
+            }
+        }
+            
+        }
+    public void login(){
+         query = "SELECT * FROM user WHERE user_name = ? AND user_password = MD5(?)";
+        try {
+            ps = konek.prepareStatement(query);
+            ps.setString(1, user_name);
+            ps.setString(2, user_password);
+            rs = ps.executeQuery();
     
-}
+            if (rs.next()) {
+               Sesi.setStatus("Aktif");
+               Sesi.setNama(rs.getString(user_fullname));
+               Sesi.setNama(rs.getString(user_email));
+               Sesi.setNama(rs.getString(user_name));
+            }else{
+                Sesi.setStatus("Tidak Aktif");
+                JOptionPane.showMessageDialog(null, "Username atau Password salah");
+            }
+        } catch (SQLException sQLException) {
+             JOptionPane.showMessageDialog(null, "Login Gagal");
+        }
+    }
+    public void logout(){
+        Sesi.setStatus("");
+        Sesi.setEmail("");
+        Sesi.setNama("");
+        Sesi.setUsername("");
+    }
+        }
+    
+        
+    
+
+ 

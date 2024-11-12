@@ -16,7 +16,7 @@ public class koneksi {
     private String db = "tokokita";
     private String user = "root";
     private String password = "";
-    private String port = "8111";
+    private String port = "3306";
     private String url = "jdbc:mysql://" + host + ":" + port + "/" + db;
     
     public Connection konekDB() throws SQLException {
@@ -29,4 +29,10 @@ public class koneksi {
        
         return konekSQL;
     }
+
+    Connection connectDB() {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
+
+    
 }

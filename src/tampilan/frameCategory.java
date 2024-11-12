@@ -3,6 +3,11 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
  */
 package tampilan;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import javax.swing.table.DefaultTableModel;
+import kelas.category;
+import kelas.user;
 
 /**
  *
@@ -15,8 +20,49 @@ public class frameCategory extends javax.swing.JFrame {
      */
     public frameCategory() {
         initComponents();
+        loadTable();
+        reset();
+       
     }
-
+    void loadTable(){
+        DefaultTableModel model = new DefaultTableModel();
+        model.addColumn("ID KATEGORI");
+        model.addColumn("KATEGORI");
+        
+        try {
+            
+        category cat = new category();
+        ResultSet data = cat.tampilCategory();
+        
+        while(data.next()){
+               model.addRow(new Object[]{
+               data.getString("category_id"),
+               data.getString("category_name"),
+               });
+    }
+        } catch (SQLException sQLException) {
+        }
+        tCategory.setModel(model);
+        
+    }
+    void reset(){
+        autoID();
+        tId.setEditable(false);
+        tNama.setText(null);
+    }
+    void  autoID(){
+        try {
+        category cat = new category();
+        ResultSet id = cat.autoID();
+        
+        if(id.next()){
+        int auto = id.getInt("Id") + 1;
+        tId.setText(String.valueOf(auto));
+    }else{
+            tId.setText("1");
+        } } catch (SQLException sQLException) {
+        }
+    }
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -27,59 +73,186 @@ public class frameCategory extends javax.swing.JFrame {
     private void initComponents() {
 
         jLabel1 = new javax.swing.JLabel();
-        jTextField1 = new javax.swing.JTextField();
         jLabel2 = new javax.swing.JLabel();
-        jTextField2 = new javax.swing.JTextField();
+        jLabel3 = new javax.swing.JLabel();
+        tId = new javax.swing.JTextField();
+        tNama = new javax.swing.JTextField();
+        bTambah = new javax.swing.JButton();
+        bUbah = new javax.swing.JButton();
+        bHapus = new javax.swing.JButton();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        tCategory = new javax.swing.JTable();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
-        jLabel1.setText("Id Category");
+        jLabel1.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
+        jLabel1.setText("CATEGORY");
 
-        jTextField1.addActionListener(new java.awt.event.ActionListener() {
+        jLabel2.setText("ID");
+
+        jLabel3.setText("Nama");
+
+        tId.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jTextField1ActionPerformed(evt);
+                tIdActionPerformed(evt);
             }
         });
 
-        jLabel2.setText("Nama Category");
+        bTambah.setText("Tambah");
+        bTambah.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                bTambahActionPerformed(evt);
+            }
+        });
+
+        bUbah.setText("Ubah");
+        bUbah.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                bUbahActionPerformed(evt);
+            }
+        });
+
+        bHapus.setText("Hapus");
+        bHapus.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                bHapusActionPerformed(evt);
+            }
+        });
+
+        tCategory.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null}
+            },
+            new String [] {
+                "Title 1", "Title 2", "Title 3", "Title 4"
+            }
+        ));
+        tCategory.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tCategoryMouseClicked(evt);
+            }
+        });
+        jScrollPane1.setViewportView(tCategory);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(21, 21, 21)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                .addGap(24, 24, 24)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 99, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(18, 18, 18)
-                        .addComponent(jTextField2))
+                        .addComponent(bTambah)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(bHapus)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(bUbah))
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(43, 43, 43)
-                        .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 99, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(162, Short.MAX_VALUE))
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(layout.createSequentialGroup()
+                                .addGap(28, 28, 28)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(tNama, javax.swing.GroupLayout.PREFERRED_SIZE, 136, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(tId, javax.swing.GroupLayout.PREFERRED_SIZE, 136, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                            .addGroup(layout.createSequentialGroup()
+                                .addGap(51, 51, 51)
+                                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 102, javax.swing.GroupLayout.PREFERRED_SIZE)))))
+                .addGap(18, 18, 18)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 452, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(23, 23, 23)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel1)
-                    .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel2)
-                    .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(221, Short.MAX_VALUE))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(14, 14, 14)
+                        .addComponent(jLabel1)
+                        .addGap(29, 29, 29)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel2)
+                            .addComponent(tId, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(21, 21, 21)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel3)
+                            .addComponent(tNama, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(72, 72, 72)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(bTambah)
+                            .addComponent(bUbah)
+                            .addComponent(bHapus)))
+                    .addGroup(layout.createSequentialGroup()
+                        .addContainerGap()
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 357, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(14, Short.MAX_VALUE))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jTextField1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField1ActionPerformed
+    private void bTambahActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bTambahActionPerformed
+           
+           try {
+            category cat = new category();
+            cat.setCategory_id(Integer.parseInt(tId.getText()));
+            cat.setCategory_name(tNama.getText());
+            
+            cat.tambahCategory();
+        } catch (NumberFormatException numberFormatException) {
+        }
+           loadTable();
+           reset();
+         
+    }//GEN-LAST:event_bTambahActionPerformed
+
+    private void tIdActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tIdActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jTextField1ActionPerformed
+    }//GEN-LAST:event_tIdActionPerformed
+
+    private void bHapusActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bHapusActionPerformed
+         
+            try {
+            category cat = new category();
+            cat.setCategory_id(Integer.parseInt(tId.getText()));
+            cat.hapusCategory();
+        } catch (NumberFormatException numberFormatException) {
+        }
+       
+        
+         loadTable();
+         reset();
+    }//GEN-LAST:event_bHapusActionPerformed
+
+    private void tCategoryMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tCategoryMouseClicked
+       int baris = tCategory.rowAtPoint(evt.getPoint());
+       String username = tCategory.getValueAt(baris, 0).toString();
+       String nama = tCategory.getValueAt(baris, 1).toString();
+       
+       tId.setText(username);
+       tId.setEditable(false);
+       tId.setVisible(true);
+       tId.setVisible(true);
+       tNama.setText(nama);
+    }//GEN-LAST:event_tCategoryMouseClicked
+
+    private void bUbahActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bUbahActionPerformed
+        
+           try {
+            category cat = new category();
+            cat.setCategory_id(Integer.parseInt(tId.getText()));
+            cat.setCategory_name(tNama.getText());
+            cat.ubahCategory();
+        } catch (NumberFormatException numberFormatException) {
+        }
+        reset();
+        loadTable();
+    }//GEN-LAST:event_bUbahActionPerformed
 
     /**
      * @param args the command line arguments
@@ -117,9 +290,15 @@ public class frameCategory extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton bHapus;
+    private javax.swing.JButton bTambah;
+    private javax.swing.JButton bUbah;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
-    private javax.swing.JTextField jTextField1;
-    private javax.swing.JTextField jTextField2;
+    private javax.swing.JLabel jLabel3;
+    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JTable tCategory;
+    private javax.swing.JTextField tId;
+    private javax.swing.JTextField tNama;
     // End of variables declaration//GEN-END:variables
 }
